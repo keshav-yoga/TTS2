@@ -11,11 +11,13 @@ app = FastAPI(title="Sarvabhasha TTS")
 
 # Dynamically load pipeline instances
 _instances = {}
-def _get(name, *args):
+
+def _get(name, *args, **kwargs):
+    """Return cached pipeline instance, creating it if needed."""
     if name not in _instances:
         module_path, cls_name = config.PIPELINES[name].split(":")
         cls = getattr(import_module(module_path), cls_name)
-        _instances[name] = cls(*args)
+        _instances[name] = cls(*args, **kwargs)
     return _instances[name]
 
 class TTSRequest(BaseModel):
