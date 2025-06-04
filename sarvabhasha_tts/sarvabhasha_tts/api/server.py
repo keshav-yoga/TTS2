@@ -25,7 +25,7 @@ class TTSRequest(BaseModel):
 @app.post("/synth")
 async def synthesise(req: TTSRequest, speaker: UploadFile = File(None)):
     # 1. Lang ID (if lang="auto")
-    lang = req.lang if req.lang != "auto" else _get("langid")([req.text])
+    lang = req.lang if req.lang != "auto" else _get("langid")(req.text)
 
     # 2. Tokenise, normalise, transliterate
     toks = _get("tokenizer", lang)(req.text)
